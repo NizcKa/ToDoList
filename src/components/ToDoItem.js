@@ -1,40 +1,46 @@
 import React, { useState } from 'react';
 
-function ToDoItem({ taskIndex, toDo, completeToDo, editToDo, saveToDo, removeToDo }) {
-  const [editText, setEditText] = useState(toDo.text);
-  const [isComplete, setIsComplete] = useState(false);
+function ToDoItem({text, updateToDo, removeToDo}) {
+    const [isComplete, setIsComplete] = useState(false);
+    const [isEditing, setIsEditing] = useState(false);
+    const [editText, setEditText] = useState(text);
 
-  const handleSave = () => {
-    saveToDo(taskIndex, editText);
-  };
+    const handleSave = () => {
+      if (editText.trim()) {
+        updateToDo(editText);  // Calls the update function in App.js 
+        setIsEditing(false);   
+      }
+    };
 
-  return (
-    <li>
-      {toDo.isEditing ? (
-        <>
-          <input
-            type="text"
-            value={editText}
-            onChange={(e) => setEditText(e.target.value)}
-          />
-          <button onClick={handleSave}>Save</button>
-        </>
-      ) : (
-        <>
-          <span
-            style={{ textDecoration: toDo.isComplete ? 'line-through' : 'none' }}
-          >
-            {toDo.text}
-          </span>
-          <button onClick={() => completeToDo(taskIndex)}>
-            {toDo.isComplete ? 'Undo' : 'Complete'}
-          </button>
-          <button onClick={() => editToDo(taskIndex)}>Edit</button>
-          <button onClick={() => removeToDo(taskIndex)}>Remove</button>
-        </>
-      )}
-    </li>
-  );
-}
+    return (
+      <li>
 
-export default ToDoItem;
+        {isEditing ? (  
+          <>
+            <input  //edit input prompt
+              type="text"
+              value={editText} 
+              onChange={(e) => setEditText(e.target.value)} 
+            />
+            <button onClick={handleSave}>Save</button>
+            <button onClick={() => setIsEditing(false)}>Cancel</button>
+          </>
+        ) : (
+          <>
+            <p style={{ textDecoration: isComplete ? 'line-through' : 'none' }}>
+              {text}
+            </p>   
+            <button onClick={() => setIsComplete(!isComplete)} disabled={isEditing}>
+              {isComplete ? 'Undo' : 'Complete'}
+            </button>
+
+            <button onClick={() => setIsEditing(!isEditing)} disabled={isComplete}>Edit</button>
+            <button onClick={removeToDo} disabled={isComplete || isEditing}>Delete</button>
+          </>
+        )}
+
+      </li>
+    );
+  }
+  
+  export default ToDoItem;

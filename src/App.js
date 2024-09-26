@@ -9,62 +9,31 @@ function App() {
   //adds a new item to the list
   const addToDo = () => {
     if (newToDo.trim()) { //checks if input task is empty
-      setToDos([...toDos, {text: newToDo, isComplete: false, isEditing: false }]); 
+      setToDos([...toDos, {text: newToDo, isComplete: false}]); 
       setNewToDo("");
     }
   }
 
-  const completeToDo = (taskIndex) => {
-    const updatedToDos = toDos.map((toDo, index) =>
-      index === taskIndex ? { ...toDo, isComplete: !toDo.isComplete } : toDo
-    );
-    setToDos(updatedToDos);
+  //Updates the selected item
+  const updateToDo = (toDoEdit, taskIndex) => {
+    const updatedToDos = [...toDos];
+    updatedToDos[taskIndex].text = toDoEdit; 
+    setToDos(updatedToDos); 
   };
 
-  const editToDo = (taskIndex) => {
-    const updatedToDos = toDos.map((toDo, index) =>
-      index === taskIndex ? { ...toDo, isEditing: true } : toDo
-    );
-    setToDos(updatedToDos);
-  };
-
-  const saveToDo = (taskIndex, newText) => {
-    const updatedToDos = toDos.map((toDo, index) =>
-      index === taskIndex ? { ...toDo, text: newText, isEditing: false } : toDo
-    );
-    setToDos(updatedToDos);
-  };
-
+  // Function to remove a to-do based on its unique id
   const removeToDo = (taskIndex) => {
-    setToDos(toDos.filter((_, index) => index !== taskIndex));
+    const updatedToDos = toDos.filter(toDo => toDo.taskIndex !== taskIndex);
+    setToDos(updatedToDos);  
   };
 
 
   return (
 
     <div className="App">
-      <div>
+
+      <div> {/*Task list*/}
         <h1>To Do List</h1>
-
-        {toDos.length === 0 ? (
-          <p>No to-dos available. Add one and get started!</p>
-        ) : (
-          <ul>
-            {toDos.map((toDo, taskIndex) => (
-              <ToDoItem
-                key={taskIndex}
-                toDo={toDo}
-                taskIndex={taskIndex}
-                completeToDo={completeToDo}
-                editToDo={editToDo}
-                saveToDo={saveToDo}  // Pass saveToDo function
-                removeToDo={removeToDo}
-              />
-            ))}
-          </ul>
-        )}
-
-        
         <input
           type="text"
           value={newToDo}
@@ -72,7 +41,23 @@ function App() {
           placeholder="Enter a new to do"
         />
         <button onClick={addToDo}>Add</button>
-        
+      </div>
+
+      <div> {/*Task input*/}
+        {toDos.length === 0 ? (
+          <p>No to-dos available. Add one and get started!</p>
+        ) : (
+          <ul>
+            {toDos.map((toDo, taskIndex) => (
+              <ToDoItem
+                key={taskIndex} 
+                text={toDo.text} 
+                updateToDo={(toDoEdit) => updateToDo(toDoEdit, taskIndex)}  
+                removeToDo={() => removeToDo(toDo.taskIndex)} 
+              />
+            ))}
+          </ul>
+        )}
       </div>
 
     </div>
