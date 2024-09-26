@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import './App.css';
 
 function ToDoItem({text, updateToDo, removeToDo}) {
     const [isComplete, setIsComplete] = useState(false);
@@ -13,7 +14,7 @@ function ToDoItem({text, updateToDo, removeToDo}) {
     };
 
     return (
-      <li>
+      <li className="toDo-items">
 
         {isEditing ? (  
           <>
