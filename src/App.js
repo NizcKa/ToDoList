@@ -12,6 +12,9 @@ function App() {
       setToDos([...toDos, {text: newToDo, isComplete: false}]); 
       setNewToDo("");
     }
+    else {
+      alert("Please input a task"); 
+    }
   }
 
   //Updates the selected item
@@ -21,7 +24,7 @@ function App() {
     setToDos(updatedToDos); 
   };
 
-  // Function to remove a to-do based on its unique id
+  // Function to remove a to-do based on its index
   const removeToDo = (taskIndex) => {
     const updatedToDos = toDos.filter((_, index) => index !== taskIndex);
     setToDos(updatedToDos);  
@@ -33,6 +36,7 @@ function App() {
     <div className="app">
 
       <div className="toDo-input"> {/*Task list*/}
+        <div className="toDo-input-content">
           <h1 className="toDo-title">Add To Do:</h1>
           <input
             type="text"
@@ -41,6 +45,7 @@ function App() {
             placeholder="Enter a new to do"
           />
           <button onClick={addToDo}>Add</button>
+        </div>
       </div>
 
       <div className="toDo-list"> {/*Task input*/}
@@ -60,7 +65,7 @@ function App() {
           </ul>
         )}
       </div>
-
+      
     </div>
   );
 }
